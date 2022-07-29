@@ -1,15 +1,28 @@
 package com.example.board
 
 import android.Manifest
+import android.content.ContentValues
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.Canvas
+import android.graphics.Color
+import android.icu.text.SimpleDateFormat
+import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import com.example.board.databinding.ActivityMainBinding
+import java.io.OutputStream
+import java.lang.Exception
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
@@ -32,7 +45,10 @@ class MainActivity : AppCompatActivity() {
         checkPermissions()
         //请求权限
         requestPermissions()
+
+        contentResolver
     }
+
 
     fun requestPermissions(){
         //保存需要请求的权限
@@ -42,17 +58,7 @@ class MainActivity : AppCompatActivity() {
             ActivityResultContracts.RequestMultiplePermissions()){
             //获取请求结果
             isReadable = it[Manifest.permission.READ_EXTERNAL_STORAGE] ?: false
-            isWritable = it[Manifest.permission.WRITE_EXTERNAL_STORAGE] ?: false
-
-
-            if (isReadable){
-                Log.v("pxd","获取读权限成功")
-                //将视图转化为图片
-                //保存图片
-            }
-            if (isWritable){
-                Log.v("pxd","获取写权限成功")
-            }
+            isWritable = it[Manifest.permission.WRITE_EXTERNAL_STORAGE] ?: isWritable
         }
 
         if (!isReadable){
